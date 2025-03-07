@@ -1,32 +1,34 @@
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <main className='w-full p-2 flex items-center bg-violet-900/40'>
+    <main className='w-full p-2 flex items-center bg-pink-900'>
       <div className="flex w-full justify-between items-center">
         <div className="flex items-center px-24">
-
-          <span className='text-[15px] font-semibold text-white font-Head ml-2'>
+          <span className='text-[20px] font-semibold text-white font-Head ml-2'>
             IS_PROJECT
           </span>
         </div>
 
-        <div className="flex w-1/3 justify-between px-20">
-          <Link href="/menu" className='text-[18px] font-semibold text-white'>
-            Home
+        <div className="flex space-x-4 ml-auto pr-10">
+          <Link href="/machine_learning" className='px-4 py-2 bg-pink-700 text-white rounded-lg text-sm font-medium'>
+            Machine Learning
           </Link>
-
-          <Link href="/profile" className='text-[18px] font-semibold text-white'>
-            Flower
+          <Link href="/neural_network" className='px-4 py-2 bg-pink-700 text-white rounded-lg text-sm font-medium'>
+            Neural Network
           </Link>
-          
-          <Link href="/logout" className='text-[18px] font-semibold text-white'>
-            Heart
+          <Link href="/demo_machine_learning" className='px-4 py-2 bg-pink-700 text-white rounded-lg text-sm font-medium'>
+            Demo Machine Learning
+          </Link>
+          <Link href="/demo_neural_network" className='px-4 py-2 bg-pink-700 text-white rounded-lg text-sm font-medium'>
+            Demo Neural Network
           </Link>
         </div>
       </div>
     </main>
-  )
+
+  );
 }
