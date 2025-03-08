@@ -10,14 +10,9 @@ const DemoNeuralNetwork = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/jpg")) {
+    if (file) {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file)); 
-      setPrediction(null);
-    } else {
-      alert("กรุณาอัปโหลดไฟล์ JPEG หรือ JPG เท่านั้น!");
-      setSelectedFile(null);
-      setPreview(null);
       setPrediction(null);
     }
   };
@@ -61,7 +56,7 @@ const DemoNeuralNetwork = () => {
 
   return (
     <div className="min-h-screen bg-pink-100 flex flex-col items-center justify-center p-6">
-      <h1 className="text-3xl font-bold text-center text-black-500 mb-4">
+      <h1 className="text-3xl font-bold text-center text-pink-700 mb-4">
         Neural Network Models
       </h1>
 
@@ -73,7 +68,7 @@ const DemoNeuralNetwork = () => {
         )}
         <input 
           type="file" 
-          accept=".jpg, .jpeg" 
+          accept="image/*" 
           onChange={handleFileChange} 
           className="hidden"
         />
