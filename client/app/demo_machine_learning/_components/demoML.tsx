@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { predictKNNModel } from '@/actions/Action';
 import Swal from 'sweetalert2'
+import goodImg from "@/assets/good.png"
+import badImg from "@/assets/bad.png"
 
 interface FormData {
     Age: string;
@@ -89,11 +91,13 @@ export default function HeartDiseaseForm() {
             if (!result) return;
             Swal.fire({
                 title: result,
-                text: "Modal with a custom image.",
-                imageUrl: "https://unsplash.it/400/200",
-                imageWidth: 400,
-                imageHeight: 200,
-                imageAlt: "Custom image"
+                text: result === "Low Risk"
+                    ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+                    : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+                imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+                imageWidth: 300,
+                imageHeight: 300,
+                imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
             });
 
         })
