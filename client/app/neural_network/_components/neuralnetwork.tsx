@@ -6,9 +6,9 @@ import Link from "next/link";
 const NeuralNetwork = () => {
   return (
     <div className="min-h-screen bg-pink-100 p-8">
-      <header className="text-center text-black-500 text-3xl font-bold mb-6">
-        🌸 Neural Network 🌸
-      </header>
+       <h1 className="text-4xl font-bold text-center text-pink-700 mb-6">
+        Neural Network
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-6 bg-white rounded-lg shadow-md">
