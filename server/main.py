@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import joblib
+import gdown
 import re
 
 app = FastAPI()
@@ -21,12 +22,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# URLs สำหรับดาวน์โหลดโมเดล
+url_KNN = "https://drive.google.com/uc?export=download&id=17cXNpNunl1j_MdBkPTdNTAK4FVKIQhun"
+url_CNN = "https://drive.google.com/uc?export=download&id=1hb2_aWQ3EJJLbVgzWLOYZ5BeEiaNUvVD"
 
-with open("models/knn_model.pkl", "rb") as file:
-    knn_model = joblib.load(file)
+# ตรวจสอบและโหลดโมเดล KNN
+knn_model_path = "knn_model.pkl"
+if not os.path.exists(knn_model_path):
+    gdown.download(url_KNN, knn_model_path, quiet=False)
+knn_model = joblib.load(knn_model_path)
 
-flower_model = tf.keras.models.load_model("models/flower_type.h5")
-
+# ตรวจสอบและโหลดโมเดล CNN
+flower_model_path = "flower_type.h5"
+if not os.path.exists(flower_model_path):
+    gdown.download(url_CNN, flower_model_path, quiet=False)
+flower_model = tf.keras.models.load_model(flower_model_path)
 
 class_labels = ["Daisy", "Dandelion", "Roses", "Sunflowers", "Tulips"]
 
@@ -58,15 +68,13 @@ def predict_heart_disease(data: HeartData):
 async def predict_flower(image_data: ImageData):
     try:
         base64_data = re.sub(r'^data:image/[^;]+;base64,', '', image_data.image_base64)
-
         image_bytes = base64.b64decode(base64_data)
         img = Image.open(io.BytesIO(image_bytes))
         
         if img.mode != "RGB":
             img = img.convert("RGB")
-
+        
         img = img.resize((224, 224))
-
         img_array = image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)  
         img_array = img_array / 127.5 - 1  
@@ -76,6 +84,5 @@ async def predict_flower(image_data: ImageData):
         predicted_label = class_labels[predicted_class]
 
         return JSONResponse(content={"prediction": predicted_label})
-
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
