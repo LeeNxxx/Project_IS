@@ -1,7 +1,5 @@
-import React from 'react'
+import NeuralNetwork from "./_components/neuralnetwork";
 
-export default function page() {
-  return (
-    <div>page</div>
-  )
+export default function Page() {
+    return <NeuralNetwork />;
 }

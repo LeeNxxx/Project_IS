@@ -1,7 +1,10 @@
-import React from 'react'
+import Demo_ML from "./_components/demoML"
 
 export default function page() {
   return (
-    <div>page</div>
+    <main>
+          <Demo_ML/>
+    </main>
   )
 }
+
