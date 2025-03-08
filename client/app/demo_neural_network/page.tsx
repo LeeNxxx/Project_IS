@@ -1,7 +1,9 @@
-import React from 'react'
+import Demo_NL from "./_components/demoneuralnetwork"
 
 export default function page() {
   return (
-    <div>page</div>
+    <main>
+          <Demo_NL/>
+    </main>
   )
 }
