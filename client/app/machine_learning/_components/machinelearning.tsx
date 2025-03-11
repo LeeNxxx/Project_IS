@@ -11,6 +11,7 @@ import traintest from "@/assets/traintest.png"
 import model from "@/assets/model.png"
 import show from "@/assets/show.png"
 import svm from "@/assets/svm.png"
+import svm1 from "@/assets/svm1.png"
 
 export default function MachineLearning() {
     return (
@@ -105,36 +106,96 @@ export default function MachineLearning() {
                     <div className="flex justify-center my-4">
                         <Image src={show} alt="show" width={400} height={400} className="rounded-lg shadow-lg" />
                     </div>
+                </div>
 
-
-                    <h3 className="mt-6 text-xl font-semibold text-gray-800">อีกโมเดลนึงที่เปรียบเทียบคือ SVM</h3>
+                <div className="mt-6 bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto">
+                    <h3 className="text-2xl font-semibold text-gray-800">อีกโมเดลนึงที่เปรียบเทียบคือ SVM</h3>
                     <p className="mt-2 text-gray-700">
                         นอกจากโมเดล KNN แล้ว เรายังใช้โมเดล Support Vector Machine (SVM) เพื่อพยากรณ์โอกาสเกิดภาวะหัวใจล้มเหลว โดยใช้ Kernel Linear
                     </p>
-                    
+
                     <div className="flex justify-center my-4">
-                        <Image src={svm} alt="svm_model" width={400} height={400} className="rounded-lg shadow-lg" />
+                        <Image src={svm} alt="svm" width={600} height={600} className="rounded-lg shadow-lg" />
                     </div>
 
                     <p className="mt-2 text-gray-700">
-                        เราฝึกโมเดล SVM โดยใช้ข้อมูลฝึก `X_train_scaled` และ `y_train` และทำนายค่าด้วย `X_test_scaled`
+                        เราฝึกโมเดล SVM โดยใช้ข้อมูลฝึก <code>X_train_scaled</code> และ <code>y_train</code> และทำนายค่าด้วย <code>X_test_scaled</code>
                     </p>
 
                     <h3 className="mt-4 text-lg font-semibold text-gray-800">ผลลัพธ์ของโมเดล SVM:</h3>
                     <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
-                        <li><strong>Accuracy Score:</strong> ค่าความแม่นยำของโมเดล</li>
-                        <li><strong>Precision Score:</strong> ค่าความแม่นยำของการทำนายผลบวก</li>
-                        <li><strong>Recall Score:</strong> ความสามารถของโมเดลในการดึงข้อมูลที่เกี่ยวข้อง</li>
-                        <li><strong>F1 Score:</strong> ค่าเฉลี่ยระหว่าง Precision และ Recall</li>
-                        <li><strong>Confusion Matrix:</strong> ตารางแสดงผลการทำนายที่ถูกต้องและผิดพลาด</li>
+                        <li><strong>Accuracy Score:</strong> 0.8369</li>
+                        <li><strong>Precision Score:</strong> 0.8889</li>
+                        <li><strong>Recall Score:</strong> 0.8224</li>
+                        <li><strong>F1 Score:</strong> 0.8544</li>
                     </ul>
 
                     <div className="flex justify-center my-4">
-                        <Image src={show} alt="show_svm" width={400} height={400} className="rounded-lg shadow-lg" />
+                        <Image src={svm1} alt="svm1" width={500} height={500} className="rounded-lg shadow-lg" />
                     </div>
-
-
                 </div>
+
+                <h2 className="text-3xl font-bold text-center text-pink-700 mb-6 mt-10">
+                    เปรียบเทียบโมเดล KNN และ SVM
+                </h2>
+
+                {/* Model Performance Results */}
+                <h3 className="text-2xl font-semibold text-gray-800 mt-8">ผลการเปรียบเทียบโมเดล</h3>
+                <p className="mt-2 text-gray-700">
+                    เราทำการเปรียบเทียบผลลัพธ์ของ KNN และ SVM โดยใช้ข้อมูลเดียวกัน และประเมินโมเดลจากค่าต่างๆ เช่น
+                    Accuracy, Precision, Recall, F1 Score
+                </p>
+
+                {/* ตารางเปรียบเทียบโมเดล */}
+                <div className="mt-4 overflow-x-auto">
+                    <table className="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr className="bg-gray-200">
+                                <th className="px-4 py-2 text-gray-800 border">Metric</th>
+                                <th className="px-4 py-2 text-gray-800 border">KNN (%)</th>
+                                <th className="px-4 py-2 text-gray-800 border">SVM (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="px-4 py-2 border text-center">Accuracy</td>
+                                <td className="px-4 py-2 border text-center">84.78%</td>
+                                <td className="px-4 py-2 border text-center">83.69%</td>
+                            </tr>
+                            <tr className="bg-gray-100">
+                                <td className="px-4 py-2 border text-center">Precision</td>
+                                <td className="px-4 py-2 border text-center">90.72%</td>
+                                <td className="px-4 py-2 border text-center">88.88%</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-2 border text-center">Recall</td>
+                                <td className="px-4 py-2 border text-center">82.24%</td>
+                                <td className="px-4 py-2 border text-center">82.24%</td>
+                            </tr>
+                            <tr className="bg-gray-100">
+                                <td className="px-4 py-2 border text-center">F1 Score</td>
+                                <td className="px-4 py-2 border text-center">86.27%</td>
+                                <td className="px-4 py-2 border text-center">85.43%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                {/* สรุปผลลัพธ์ */}
+                <h3 className="text-2xl font-semibold text-gray-800 mt-8">สรุป: ควรเลือกใช้โมเดลไหน?</h3>
+                <p className="mt-2 text-gray-700">
+                    ✅ <strong className="text-xl text-pink-700">KNN เป็นตัวเลือกที่ดีกว่า</strong> สำหรับชุดข้อมูลนี้ เพราะ:
+                </p>
+                <ul className="mt-2 text-gray-700 list-disc list-inside space-y-2">
+                    <li>ให้ค่าความแม่นยำ (Accuracy) สูงกว่าเล็กน้อย</li>
+                    <li>มี Precision สูงกว่า ทำให้มั่นใจได้ว่าผลบวกที่พยากรณ์มาน่าเชื่อถือ</li>
+                    <li>ค่า F1 Score สูงกว่า แสดงถึงสมดุลที่ดีระหว่าง Precision และ Recall</li>
+                </ul>
+
+                <p className="mt-2 text-gray-700">
+                    🚀 อย่างไรก็ตาม **SVM อาจเป็นตัวเลือกที่ดีกว่า** ถ้าข้อมูลมีความซับซ้อนมากขึ้น และสามารถปรับแต่ง Kernel ให้เหมาะสมได้
+                </p>
             </div>
         </div>
     );

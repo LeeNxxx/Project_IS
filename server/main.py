@@ -25,12 +25,19 @@ app.add_middleware(
 # URLs สำหรับดาวน์โหลดโมเดล
 url_KNN = "https://drive.google.com/uc?export=download&id=17cXNpNunl1j_MdBkPTdNTAK4FVKIQhun"
 url_CNN = "https://drive.google.com/uc?export=download&id=1hb2_aWQ3EJJLbVgzWLOYZ5BeEiaNUvVD"
+url_SVM = "https://drive.google.com/uc?export=download&id=1XsY210eLq29fZqvWYD7w4Ht3sHaNEAna"
 
 # ตรวจสอบและโหลดโมเดล KNN
 knn_model_path = "knn_model.pkl"
 if not os.path.exists(knn_model_path):
     gdown.download(url_KNN, knn_model_path, quiet=False)
 knn_model = joblib.load(knn_model_path)
+
+# ตรวจสอบและโหลดโมเดล SVM
+svm_model_path = "svm_model.pkl"
+if not os.path.exists(svm_model_path):
+    gdown.download(url_SVM, svm_model_path, quiet=False)
+svm_model = joblib.load(svm_model_path)
 
 # ตรวจสอบและโหลดโมเดล CNN
 flower_model_path = "flower_type.h5"
@@ -56,14 +63,25 @@ class HeartData(BaseModel):
 class ImageData(BaseModel):
     image_base64: str
 
-@app.post("/predict/KNN")
-def predict_heart_disease(data: HeartData):
+# ทำนายภาวะหัวใจ (KNN)
+@app.post("/predict/KNN") 
+def predict_heart_disease_knn(data: HeartData):
     input_data = np.array([[data.Age, data.Sex, data.ChestPainType, data.RestingBP, data.Cholesterol,
                             data.FastingBS, data.RestingECG, data.MaxHR, data.ExerciseAngina,
                             data.Oldpeak, data.ST_Slope]])
     prediction = knn_model.predict(input_data)[0]
     return {"result": "High Risk" if prediction == 1 else "Low Risk"}
 
+# ทำนายภาวะหัวใจ (SVM)
+@app.post("/predict/SVM") 
+def predict_heart_disease_svm(data: HeartData):
+    input_data = np.array([[data.Age, data.Sex, data.ChestPainType, data.RestingBP, data.Cholesterol,
+                            data.FastingBS, data.RestingECG, data.MaxHR, data.ExerciseAngina,
+                            data.Oldpeak, data.ST_Slope]])
+    prediction = svm_model.predict(input_data)[0]
+    return {"result": "High Risk" if prediction == 1 else "Low Risk"}
+
+# ทำนายดอกไม้
 @app.post("/predict/flower")
 async def predict_flower(image_data: ImageData):
     try:

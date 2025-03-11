@@ -10,7 +10,7 @@ const NeuralNetwork = () => {
         Neural Network
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex justify-center items-center grid-cols-1 md:grid-cols-2 gap-10">
         <div className="p-6 bg-white rounded-lg shadow-md">
           <h2 className="text-xl font-semibold text-gray-900">Flowers Dataset</h2>
           <p className="mt-4 text-gray-700">

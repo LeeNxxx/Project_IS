@@ -4,3 +4,4 @@
 .DS_Store
 flower_type.h5
 knn_model.pkl
+svm_model.pkl

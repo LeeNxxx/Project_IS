@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { predictKNNModel } from '@/actions/Action';
+import { predictKNNModel, predictSVMModel } from '@/actions/Action';
 import Swal from 'sweetalert2'
 import goodImg from "@/assets/good.png"
 import badImg from "@/assets/bad.png"
@@ -83,24 +83,45 @@ export default function HeartDiseaseForm() {
         }
         new Promise((resolve) => {
             setTimeout(() => {
-                resolve(predictKNNModel(data));
+                resolve(predictSVMModel(data));
             }, 1000);
         }).then((res: unknown) => {
 
-            const { result } = res as { result: string };
-            if (!result) return;
-            Swal.fire({
-                title: result,
-                text: result === "Low Risk"
-                    ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
-                    : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
-                imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
-                imageWidth: 300,
-                imageHeight: 300,
-                imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
-            });
-
+            console.log(res)
+            // const { result } = res as { result: string };
+            // if (!result) return;
+            // Swal.fire({
+            //     title: result,
+            //     text: result === "Low Risk"
+            //         ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+            //         : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+            //     imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+            //     imageWidth: 300,
+            //     imageHeight: 300,
+            //     imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+            // })
         })
+        // new Promise((resolve) => {
+        //     setTimeout(() => {
+        //         resolve(predictSVMModel(data));
+        //     }, 1000);
+        // }).then((res: unknown) => {
+
+        //     const { result } = res as { result: string };
+        //     if (!result) return;
+        //     Swal.fire({
+        //         title: result,
+        //         text: result === "Low Risk"
+        //             ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+        //             : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+        //         imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+        //         imageWidth: 300,
+        //         imageHeight: 300,
+        //         imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+        //     });
+
+        // })
+
     };
 
 
@@ -225,6 +246,7 @@ export default function HeartDiseaseForm() {
                         </p>
                     </div>
                 )}
+                
                 {/* คำอธิบายเพิ่มเติม */}
                 <p className="mt-6 text-sm text-gray-600 text-center">
                     * การทำนายนี้ใช้ข้อมูลจากแบบจำลอง Machine Learning และเป็นเพียงเครื่องมือช่วยในการประเมินความเสี่ยง ไม่สามารถแทนที่การวินิจฉัยจากแพทย์ได้

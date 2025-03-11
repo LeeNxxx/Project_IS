@@ -34,9 +34,9 @@ export const predictCNNModel = async (Base64: string) => {
     }
 };
 
+// ทำนายภาวะหัวใจ (KNN)
 export const predictKNNModel = async (form : FormData) => {
     try{
-
 
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/predict/KNN`,  form);
 
@@ -50,6 +50,23 @@ export const predictKNNModel = async (form : FormData) => {
     }
 }
 
+// ทำนายภาวะหัวใจ (SVM)
+export const predictSVMModel = async (form : FormData) => {
+    try{
+
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/predict/SVM`,  form);
+
+        if (!response) {
+            throw new Error('Error');
+        }
+
+        return response.data;
+    }catch(error){
+        console.log(error);
+    }
+}
+
+// ทำนาย Flower Type
 export const predictLRModel = async (Base64: string) => {
     try{
 
