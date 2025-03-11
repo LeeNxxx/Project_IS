@@ -10,6 +10,7 @@ import encode1 from "@/assets/encode1.png"
 import traintest from "@/assets/traintest.png"
 import model from "@/assets/model.png"
 import show from "@/assets/show.png"
+import svm from "@/assets/svm.png"
 
 export default function MachineLearning() {
     return (
@@ -104,6 +105,35 @@ export default function MachineLearning() {
                     <div className="flex justify-center my-4">
                         <Image src={show} alt="show" width={400} height={400} className="rounded-lg shadow-lg" />
                     </div>
+
+
+                    <h3 className="mt-6 text-xl font-semibold text-gray-800">อีกโมเดลนึงที่เปรียบเทียบคือ SVM</h3>
+                    <p className="mt-2 text-gray-700">
+                        นอกจากโมเดล KNN แล้ว เรายังใช้โมเดล Support Vector Machine (SVM) เพื่อพยากรณ์โอกาสเกิดภาวะหัวใจล้มเหลว โดยใช้ Kernel Linear
+                    </p>
+                    
+                    <div className="flex justify-center my-4">
+                        <Image src={svm} alt="svm_model" width={400} height={400} className="rounded-lg shadow-lg" />
+                    </div>
+
+                    <p className="mt-2 text-gray-700">
+                        เราฝึกโมเดล SVM โดยใช้ข้อมูลฝึก `X_train_scaled` และ `y_train` และทำนายค่าด้วย `X_test_scaled`
+                    </p>
+
+                    <h3 className="mt-4 text-lg font-semibold text-gray-800">ผลลัพธ์ของโมเดล SVM:</h3>
+                    <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
+                        <li><strong>Accuracy Score:</strong> ค่าความแม่นยำของโมเดล</li>
+                        <li><strong>Precision Score:</strong> ค่าความแม่นยำของการทำนายผลบวก</li>
+                        <li><strong>Recall Score:</strong> ความสามารถของโมเดลในการดึงข้อมูลที่เกี่ยวข้อง</li>
+                        <li><strong>F1 Score:</strong> ค่าเฉลี่ยระหว่าง Precision และ Recall</li>
+                        <li><strong>Confusion Matrix:</strong> ตารางแสดงผลการทำนายที่ถูกต้องและผิดพลาด</li>
+                    </ul>
+
+                    <div className="flex justify-center my-4">
+                        <Image src={show} alt="show_svm" width={400} height={400} className="rounded-lg shadow-lg" />
+                    </div>
+
+
                 </div>
             </div>
         </div>
