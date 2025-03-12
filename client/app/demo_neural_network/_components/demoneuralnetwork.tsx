@@ -63,7 +63,7 @@ const DemoNeuralNetwork = () => {
 
     setLoading(true);
     try {
-      const resizedImage = await resizeImage(selectedFile, 224, 224);
+      const resizedImage = await resizeImage(selectedFile, 800, 800);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_END_POINT}/predict/flower`, {
         method: "POST",
