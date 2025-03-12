@@ -9,6 +9,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-pink-100 flex flex-col justify-center items-center">
 
+
       {/* Hero Section */}
       <div className="flex flex-col items-center text-center max-w-3xl p-5">
         <h1 className="text-4xl md:text-5xl font-bold text-pink-700">AI Predicts Health & Beauty!</h1>

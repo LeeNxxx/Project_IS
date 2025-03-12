@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Loading from '@/app/loading';
 import { predictKNNModel, predictSVMModel } from '@/actions/Action';
 import Swal from 'sweetalert2'
 import goodImg from "@/assets/good.png"
@@ -64,70 +65,90 @@ export default function HeartDiseaseForm() {
         setFormData({ ...formData, [name]: isNaN(parsedValue) ? 0 : parsedValue });
     };
 
+    const [isLoading, setIsLoading] = useState(false); // ประกาศ State
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true); // ✅ เริ่มแสดง Loading
 
-        const data = {
-            Age: Number(formData.Age),
-            Sex: Number(formData.Sex),
-            ChestPainType: Number(formData.ChestPainType),
-            RestingBP: Number(formData.RestingBP),
-            Cholesterol: Number(formData.Cholesterol),
-            FastingBS: Number(formData.FastingBS),
-            RestingECG: Number(formData.RestingECG),
-            MaxHR: Number(formData.MaxHR),
-            ExerciseAngina: Number(formData.ExerciseAngina),
-            Oldpeak: Number(formData.Oldpeak),
-            ST_Slope: Number(formData.ST_Slope),
-            HeartDisease: Number(formData.HeartDisease)
-        }
-        new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(predictKNNModel(data));
-            }, 1000);
-        }).then((res: unknown) => {
-            const { result } = res as { result: string };
-            if (!result) return;
-            Swal.fire({
-                title: `KNN - ${result}`,
-                text: result === "Low Risk"
+        try {
+            const data = {
+                Age: Number(formData.Age),
+                Sex: Number(formData.Sex),
+                ChestPainType: Number(formData.ChestPainType),
+                RestingBP: Number(formData.RestingBP),
+                Cholesterol: Number(formData.Cholesterol),
+                FastingBS: Number(formData.FastingBS),
+                RestingECG: Number(formData.RestingECG),
+                MaxHR: Number(formData.MaxHR),
+                ExerciseAngina: Number(formData.ExerciseAngina),
+                Oldpeak: Number(formData.Oldpeak),
+                ST_Slope: Number(formData.ST_Slope),
+                HeartDisease: Number(formData.HeartDisease)
+            };
+
+            // ✅ ทำนายผลด้วย KNN
+            const knnResult: any = await new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(predictKNNModel(data));
+                }, 1000);
+            });
+
+            const knnPrediction = knnResult.result;
+            if (!knnPrediction) return;
+
+            await Swal.fire({
+                title: `KNN - ${knnPrediction}`,
+                text: knnPrediction === "Low Risk"
                     ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
                     : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
-                imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+                imageUrl: knnPrediction === "Low Risk" ? goodImg.src : badImg.src,
                 imageWidth: 300,
                 imageHeight: 300,
-                imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
-            }).then((alerted)=>{
-                if (alerted.isConfirmed) {
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve(predictSVMModel(data));
-                        }, 1000);
-                    }).then((res: unknown) => {
-            
-                        const { result } = res as { result: string };
-                        if (!result) return;
-                        Swal.fire({
-                            title: `SVM - ${result}`,
-                            text: result === "Low Risk"
-                                ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
-                                : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
-                            imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
-                            imageWidth: 300,
-                            imageHeight: 300,
-                            imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
-                        });
-            
-                    })
-                }
-            })
-        })
+                imageAlt: knnPrediction === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+            });
 
+            // ✅ ถ้าผู้ใช้กด OK ให้ทำนายด้วย SVM ต่อ
+            const alertResponse = await Swal.fire({
+                title: "ต้องการทำนายด้วย SVM หรือไม่?",
+                text: "SVM เป็นโมเดลที่แตกต่างจาก KNN และอาจให้ผลลัพธ์ที่แตกต่างกัน",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "ใช่, ทำนายเลย!",
+                cancelButtonText: "ยกเลิก"
+            });
+
+            if (alertResponse.isConfirmed) {
+                const svmResult: any = await new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(predictSVMModel(data));
+                    }, 1000);
+                });
+
+                const svmPrediction = svmResult.result;
+                if (!svmPrediction) return;
+
+                await Swal.fire({
+                    title: `SVM - ${svmPrediction}`,
+                    text: svmPrediction === "Low Risk"
+                        ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+                        : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+                    imageUrl: svmPrediction === "Low Risk" ? goodImg.src : badImg.src,
+                    imageWidth: 300,
+                    imageHeight: 300,
+                    imageAlt: svmPrediction === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+                });
+            }
+
+        } finally {
+            setIsLoading(false); // ปิด Loading หลังจากได้ผลลัพธ์
+        }
     };
 
 
+
     return (
-        <div className="min-h-screen bg-gradient-to-r bg-pink-100 flex items-center justify-center p-6">
+        <div className="min-h-screen bg-gradient-to-r bg-pink-100 flex items-center justify-center p-6 relative">
+            {isLoading && <Loading />} {/*แสดง Loading ขณะรอผลลัพธ์ */}
             <div className="bg-white p-8 rounded-lg shadow-lg w-[160vh] mx-auto">
                 <h2 className="text-3xl font-bold text-center text-pink-700 mb-6">Heart Disease Risk Prediction</h2>
                 <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
@@ -233,9 +254,14 @@ export default function HeartDiseaseForm() {
                     </div>
 
                     <div className="col-span-2 flex justify-center">
-                        <button type="submit" className="mt-4 px-6 py-2 bg-pink-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600">
-                            Predict Risk
-                        </button>
+                        {!isLoading && (
+                            <button
+                                type="submit"
+                                className="mt-4 px-6 py-2 bg-pink-700 text-white font-semibold rounded-lg shadow-md hover:bg-red-600"
+                            >
+                                Predict Risk
+                            </button>
+                        )}
                     </div>
                 </form>
 
@@ -247,7 +273,7 @@ export default function HeartDiseaseForm() {
                         </p>
                     </div>
                 )}
-                
+
                 {/* คำอธิบายเพิ่มเติม */}
                 <p className="mt-6 text-sm text-gray-600 text-center">
                     * การทำนายนี้ใช้ข้อมูลจากแบบจำลอง Machine Learning และเป็นเพียงเครื่องมือช่วยในการประเมินความเสี่ยง ไม่สามารถแทนที่การวินิจฉัยจากแพทย์ได้
