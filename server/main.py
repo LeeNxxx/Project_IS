@@ -60,6 +60,7 @@ class HeartData(BaseModel):
     Oldpeak: float
     ST_Slope: int
 
+
 class ImageData(BaseModel):
     image_base64: str
 

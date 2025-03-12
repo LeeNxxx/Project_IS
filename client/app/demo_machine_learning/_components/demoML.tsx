@@ -83,44 +83,45 @@ export default function HeartDiseaseForm() {
         }
         new Promise((resolve) => {
             setTimeout(() => {
-                resolve(predictSVMModel(data));
+                resolve(predictKNNModel(data));
             }, 1000);
         }).then((res: unknown) => {
-
-            console.log(res)
-            // const { result } = res as { result: string };
-            // if (!result) return;
-            // Swal.fire({
-            //     title: result,
-            //     text: result === "Low Risk"
-            //         ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
-            //         : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
-            //     imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
-            //     imageWidth: 300,
-            //     imageHeight: 300,
-            //     imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
-            // })
+            const { result } = res as { result: string };
+            if (!result) return;
+            Swal.fire({
+                title: `KNN - ${result}`,
+                text: result === "Low Risk"
+                    ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+                    : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+                imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+                imageWidth: 300,
+                imageHeight: 300,
+                imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+            }).then((alerted)=>{
+                if (alerted.isConfirmed) {
+                    new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(predictSVMModel(data));
+                        }, 1000);
+                    }).then((res: unknown) => {
+            
+                        const { result } = res as { result: string };
+                        if (!result) return;
+                        Swal.fire({
+                            title: `SVM - ${result}`,
+                            text: result === "Low Risk"
+                                ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
+                                : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
+                            imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
+                            imageWidth: 300,
+                            imageHeight: 300,
+                            imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
+                        });
+            
+                    })
+                }
+            })
         })
-        // new Promise((resolve) => {
-        //     setTimeout(() => {
-        //         resolve(predictSVMModel(data));
-        //     }, 1000);
-        // }).then((res: unknown) => {
-
-        //     const { result } = res as { result: string };
-        //     if (!result) return;
-        //     Swal.fire({
-        //         title: result,
-        //         text: result === "Low Risk"
-        //             ? "สุขภาพหัวใจของคุณอยู่ในเกณฑ์ดี! 🎉"
-        //             : "คุณอาจมีความเสี่ยงต่อโรคหัวใจ ⚠️ กรุณาปรึกษาแพทย์",
-        //         imageUrl: result === "Low Risk" ? goodImg.src : badImg.src,
-        //         imageWidth: 300,
-        //         imageHeight: 300,
-        //         imageAlt: result === "Low Risk" ? "Healthy Heart" : "Heart Risk"
-        //     });
-
-        // })
 
     };
 
