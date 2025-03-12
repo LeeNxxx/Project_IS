@@ -17,11 +17,41 @@ const DemoNeuralNetwork = () => {
     }
   };
 
-  const convertToBase64 = (file: File): Promise<string> => {
+  const resizeImage = (file: File, maxWidth: number, maxHeight: number): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result?.toString().split(",")[1] || "");
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL("image/jpeg", 0.7).split(",")[1]);
+          } else {
+            reject(new Error("Could not get canvas context"));
+          }
+        };
+      };
       reader.onerror = (error) => reject(error);
     });
   };
@@ -33,21 +63,21 @@ const DemoNeuralNetwork = () => {
 
     setLoading(true);
     try {
-      const base64Image = await convertToBase64(selectedFile);
+      const resizedImage = await resizeImage(selectedFile, 224, 224);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_END_POINT}/predict/flower`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image_base64: base64Image }),
+        body: JSON.stringify({ image_base64: resizedImage }),
       });
 
-      if (!response.ok) throw new Error("เกิดข้อผิดพลาดในการ Predict");
+      if (!response.ok) throw new Error("เกิดข้อผิดพลาดในการ Predict, Please try again");
 
       const data = await response.json();
       setPrediction(data.prediction);
     } catch (error) {
       console.error("Error:", error);
-      setPrediction("เกิดข้อผิดพลาดในการ Predict");
+      setPrediction("เกิดข้อผิดพลาดในการ Predict, Please try again");
     } finally {
       setLoading(false);
     }
