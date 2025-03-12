@@ -27,8 +27,7 @@ const DemoNeuralNetwork = () => {
   };
 
   const handlePredict = async () => {
-    if (!selectedFile) {
-      alert("กรุณาเลือกไฟล์ก่อนทำการ Predict");
+    if (!selectedFile || loading) {
       return;
     }
 
@@ -71,12 +70,13 @@ const DemoNeuralNetwork = () => {
           accept="image/*" 
           onChange={handleFileChange} 
           className="hidden"
+          disabled={loading} 
         />
       </label>
 
       <button 
         onClick={handlePredict} 
-        className="mt-4 px-6 py-2 bg-rose-500 text-white rounded-lg shadow-md hover:bg-rose-400 transition"
+        className="mt-4 px-6 py-2 bg-rose-500 text-white rounded-lg shadow-md hover:bg-rose-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={loading}
       >
         {loading ? "Predicting..." : "Predict"}
